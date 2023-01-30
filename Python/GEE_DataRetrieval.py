@@ -146,8 +146,8 @@ def get_TrainingSet():
 
             ee_Ls_Feature = ee.Feature(LandslidesGEE.toList(size).get(i)).buffer(1000).geometry()
 
-            start_date = dates[i][0]
-            end_date = dates[i][1]
+            start_date = dates.iloc[i][0]
+            end_date = dates.iloc[i][1]
 
             s2_col = ee.ImageCollection('COPERNICUS/S2_SR').filterBounds(ee_Ls_Feature).filterDate(start_date, end_date)
 
@@ -230,8 +230,8 @@ def get_TrainingSet():
 
             ee_Ls_Feature = ee.Feature(LandslidesGEE.toList(size).get(i)).geometry()
 
-            start_date = dates[i][0]
-            end_date = dates[i][1]
+            start_date = dates.iloc[i][0]
+            end_date = dates.iloc[i][1]
 
             precip_col = ee.ImageCollection('NASA/GPM_L3/IMERG_V06').filterBounds(ee_Ls_Feature).filterDate(start_date, end_date).sum()
 
@@ -283,8 +283,8 @@ def get_TrainingSet():
 
         ee_Ls_Feature = ee.Feature(No_LS_GEE.toList(size).get(i)).buffer(1000).geometry()
 
-        start_date = dates[i][0]
-        end_date = dates[i][1]
+        start_date = dates.iloc[i][0]
+        end_date = dates.iloc[i][1]
 
         s2_col = ee.ImageCollection('COPERNICUS/S2_SR').filterBounds(ee_Ls_Feature).filterDate(start_date, end_date)
 
