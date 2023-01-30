@@ -17,6 +17,7 @@ dependencies:
   - gdal
   - rasterio
   - rasterstats
+  - rioxarray
   - folium
   - spyder
   - jupyter
