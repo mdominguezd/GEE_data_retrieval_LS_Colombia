@@ -1,0 +1,23 @@
+name: LS_Colombia
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - numpy
+  - matplotlib
+  - pandas
+  - openpyxl
+  - seaborn
+  - scikit-learn
+  - statsmodels
+  - shapely
+  - geopandas
+  - earthengine-api
+  - geemap
+  - gdal
+  - rasterio
+  - rasterstats
+  - folium
+  - spyder
+  - jupyter
+  - jupyterlab
