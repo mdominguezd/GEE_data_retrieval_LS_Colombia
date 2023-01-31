@@ -9,10 +9,8 @@ import os
 import pandas as pd
 import numpy as np
 import geopandas as gpd
-import matplotlib.pyplot as plt 
 import requests
-from io import BytesIO
-
+from zipfile import ZipFile
 
 # Setup working environment
 if 'data' not in os.listdir():
@@ -22,23 +20,30 @@ if 'output' not in os.listdir():
 if 'figures' not in os.listdir():
     os.mkdir('figures')
 
-def get_LS_data(url = 'https://github.com/mdominguezd/GEE_data_retrieval_LS_Colombia/blob/main/RAW_data/Landslides_DataBase.xlsx'):
-    
+def get_LS_data(URL = 'https://github.com/mdominguezd/GEE_data_retrieval_LS_Colombia/blob/main/RAW_data/Landslides_DataBase.xlsx?raw=true'):
     """
         Function 
     """
     
-    data = requests.get(url).content
-    df = pd.read_excel(BytesIO(data))
+    ## Credits to TSInfo Technologies. https://www.youtube.com/watch?v=DgLYeR56iNk&t=173s&ab_channel=TSInfoTechnologies
     
-    response = requests.get(url).content
-       
+    # Download zip file
+    req = requests.get(URL)
+    
+    # Get the zip file name
+    zipname = 'data/'+URL.split('/')[-1].split('?')[0]
+    
+    # Write the zip folder to data folder
+    with open(zipname, 'wb') as output_file:
+        output_file.write(req.content)
+    
+    
     # Read the dataset downloded
-    df = pd.read_excel('test.xlsx')
+    df = pd.read_excel('data/Landslides_DataBase.xlsx', engine='openpyxl')
     
     # Merge all excel sheets into one
     for i in np.arange(1,37,1):
-        df = pd.concat([df, pd.read_excel('test.xlsx', sheet_name = i)])
+        df = pd.concat([df, pd.read_excel('data/Landslides_DataBase.xlsx', sheet_name = i, engine='openpyxl')])
     
     
     # Set date as date type
@@ -56,7 +61,8 @@ def get_LS_data(url = 'https://github.com/mdominguezd/GEE_data_retrieval_LS_Colo
     # Export geodataframe as .GEOJSON
     landslides_geo.to_file(out_path, driver = 'GeoJSON')
     
-    #  Uncomment in case you want a figure with the Landslide Inventory for Colombia (2017-2022)
+    #   Uncomment in case you want a figure with the Landslide Inventory for Colombia (2017-2022)
+
     
     # # Get Colombia's Boundary for plot
     # world_filepath = gpd.datasets.get_path('naturalearth_lowres')
