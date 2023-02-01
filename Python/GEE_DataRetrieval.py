@@ -82,6 +82,8 @@ def get_ndvi_filter(path_gdf = 'data/Landslide_Inventory_Colombia.geojson'):
     # Create a list with all of the features in the feature collection
     Ft_list = LandslidesGEE.toList(size)
     
+    print(size)
+    
     # Iterate over dates list
     for i in range(len(dates)):
         
@@ -116,12 +118,15 @@ def get_ndvi_filter(path_gdf = 'data/Landslide_Inventory_Colombia.geojson'):
                 
         # Append the mean value of NDVI in the AOI to the empty list
         NDVI_info.append(np.nanmean(results_NDVI))
+
         
     # Assign the NDVI_info to landslides dataset
-    Landslides['S2_NDVI'][:len(NDVI_info)] = NDVI_info
+    Landslides['S2_NDVI'] = NDVI_info
     
     # Filter all values where no NDVI was calculated
     Landslides = Landslides.dropna()
+    
+    print(len(Landslides))
     
     out_path = path_gdf.split('_')[0] + '_with_NDVI.geojson'
     
@@ -252,6 +257,9 @@ def get_full_training_set(path_LS, path_no_LS):
     train_set = pd.concat([Landslides, No_LS]).iloc[:,[0,2,3,4,5,6]]
     
     path_training_set = 'Landslide_GEE_training.geojson'
+    
+    # Fix the date column
+    train_set.Date = train_set.Date.apply(lambda df : pd.to_datetime(str(df)[:10]))
     
     train_set.to_file(filename = path_training_set, driver = 'GeoJSON')
     

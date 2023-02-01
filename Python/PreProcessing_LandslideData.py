@@ -3,14 +3,12 @@
 
 # In[1]:
 
-
 # Import built-in modules
 import os
 import pandas as pd
 import numpy as np
 import geopandas as gpd
 import requests
-from zipfile import ZipFile
 
 # Setup working environment
 if 'data' not in os.listdir():
